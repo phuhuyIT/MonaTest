@@ -1,4 +1,7 @@
 
+using EmployeeManagement.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace EmployeeManagement
 {
     public class Program
@@ -8,7 +11,8 @@ namespace EmployeeManagement
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddDbContext<MonaTestContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
