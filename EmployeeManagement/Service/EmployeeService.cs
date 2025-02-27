@@ -19,13 +19,13 @@ namespace EmployeeManagement.Service
             return await _employeeRepo.GetEmployeeByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync(int page, int pageSize)
+        public async Task<IEnumerable<Employee>> GetEmployeesAsync(int page, int pageSize, bool includeInactive)
         {
             if (!await CheckPageAndPageSize(page, pageSize))
             {
                 return null;
             }
-            return await _employeeRepo.GetEmployeesAsync(page, pageSize);
+            return await _employeeRepo.GetEmployeesAsync(page, pageSize, includeInactive);
         }
 
         public async Task AddEmployeeAsync(CreatedEmployeeDTO employeeDTO)
@@ -35,7 +35,8 @@ namespace EmployeeManagement.Service
                 EmployeeCode = $"NV_{DateTime.Now:yyyy_MM_dd}_{ await _employeeRepo.GetNumEmployeeAsync()+ 1}",
                 Name = employeeDTO.Name,
                 DateOfBirth = employeeDTO.DateOfBirth,
-                Position = employeeDTO.Position
+                Position = employeeDTO.Position,
+                IsActive = true
             };
             await _employeeRepo.AddEmployeeAsync(employee);
         }
@@ -70,6 +71,11 @@ namespace EmployeeManagement.Service
         public async Task<int> GetNumEmployeeAsync()
         {
             return await _employeeRepo.GetNumEmployeeAsync();
+        }
+
+        public async Task SoftDeleteEmployeeAsync(int id)
+        {
+           await _employeeRepo.SoftDeleteEmployeeAsync(id);
         }
     }
 

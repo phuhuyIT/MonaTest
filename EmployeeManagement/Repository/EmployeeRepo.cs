@@ -17,12 +17,18 @@ namespace EmployeeManagement.Repository
             return await _context.Employees.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync(int page, int pageSize)
+        public async Task<IEnumerable<Employee>> GetEmployeesAsync(int page, int pageSize, bool includeInactive)
         {
-            return await _context.Employees
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            var query = _context.Employees.AsQueryable();
+            if (!includeInactive)
+            {
+                query = query.Where(e => e.IsActive);
+            }
+            var employees = await query
+                          .Skip((page - 1) * pageSize)
+                          .Take(pageSize)
+                          .ToListAsync();
+            return employees;
         }
 
         public async Task AddEmployeeAsync(Employee employee)
@@ -50,9 +56,18 @@ namespace EmployeeManagement.Repository
             }
         }
 
+
         public async Task<int> GetNumEmployeeAsync()
         {
             return await _context.Employees.CountAsync();
+        }
+
+        public async Task SoftDeleteEmployeeAsync(int id)
+        {
+            var employee = _context.Employees.Find(id);
+            employee.IsActive = false;
+            employee.DateOfLeaving = DateTime.Now;
+            await _context.SaveChangesAsync();
         }
     }
 

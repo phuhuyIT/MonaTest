@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EmployeeManagement.Data;
 
-public partial class Employee
+public class Employee
 {
     public int EmployeeId { get; set; }
 
@@ -14,5 +14,7 @@ public partial class Employee
     public DateOnly DateOfBirth { get; set; }
 
     public string Position { get; set; } = null!;
+    public bool IsActive { get; set; } = true;
+    public DateTime? DateOfLeaving { get; set; } 
     public int Age => DateTime.Now.Year - DateOfBirth.Year;
 }
