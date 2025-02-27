@@ -1,5 +1,7 @@
 
 using EmployeeManagement.Data;
+using EmployeeManagement.Repository;
+using EmployeeManagement.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement
@@ -17,6 +19,8 @@ namespace EmployeeManagement
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             var app = builder.Build();
 

@@ -1,4 +1,5 @@
 ﻿using EmployeeManagement.Data;
+using EmployeeManagement.DTO.EmployeeDTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Repository
@@ -30,9 +31,12 @@ namespace EmployeeManagement.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEmployeeAsync(Employee employee)
+        public async Task UpdateEmployeeAsync(UpdateEmployeeDTO employeeDTO)
         {
-            _context.Entry(employee).State = EntityState.Modified;
+            Employee employee = await GetEmployeeByIdAsync(employeeDTO.EmployeeId);
+            employee.Name = employeeDTO.Name;
+            employee.DateOfBirth = employeeDTO.DateOfBirth;
+            employee.Position = employeeDTO.Position;
             await _context.SaveChangesAsync();
         }
 
@@ -44,6 +48,11 @@ namespace EmployeeManagement.Repository
                 _context.Employees.Remove(employee);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<int> GetNumEmployeeAsync()
+        {
+            return await _context.Employees.CountAsync();
         }
     }
 

@@ -1,15 +1,16 @@
 ﻿using EmployeeManagement.Data;
 using EmployeeManagement.DTO.EmployeeDTO;
 
-namespace EmployeeManagement.Repository
+namespace EmployeeManagement.Service
 {
-    public interface IEmployeeRepo
+    public interface IEmployeeService
     {
         Task<Employee> GetEmployeeByIdAsync(int id);
         Task<IEnumerable<Employee>> GetEmployeesAsync(int page, int pageSize);
-        Task AddEmployeeAsync(Employee employee);
-        Task UpdateEmployeeAsync(UpdateEmployeeDTO employee);
+        Task AddEmployeeAsync(CreatedEmployeeDTO employee);
         Task DeleteEmployeeAsync(int id);
+        Task UpdateEmployeeAsync(UpdateEmployeeDTO employeeDTO);
         Task<int> GetNumEmployeeAsync();
     }
+
 }
